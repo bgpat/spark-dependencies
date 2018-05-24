@@ -42,6 +42,12 @@ public class SpanDeserializer extends StdDeserializer<Span> {
   public Span deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
     JsonNode node = objectMapper.getFactory().setCodec(objectMapper).getCodec().readTree(jp);
 
+    if (node == null || node.get("spanID") == null || node.get("parentSpanID") == null ||
+            node.get("traceID") == null || node.get("startTime") == null ||
+            node.get("process") == null || node.get("tags") == null) {
+        return new Span();
+    }
+
     String spanIdHex = node.get("spanID").asText();
     String parentIdHex = node.get("parentSpanID").asText();
     String traceIdHex = node.get("traceID").asText();

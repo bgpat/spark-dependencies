@@ -127,6 +127,9 @@ public class SpansToDependencyLinks implements Function<Iterable<Span>, Iterable
         String clientService = null;
         String serverService = null;
         for (Span span: sharedSpans) {
+            if (span == null || span.getTags() == null) {
+                continue;
+            }
             for (KeyValue tag: span.getTags()) {
                 if (Tags.SPAN_KIND_CLIENT.equals(tag.getValueString())) {
                     clientService = span.getProcess().getServiceName();
